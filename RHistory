@@ -1,0 +1,512 @@
+training <- df[inTrain,]
+testing <- df[-inTrain,]
+dim(training); dim(testing)
+trControl <- trainControl(method="cv", number = 8)
+predictCT <- predict(modelCT, newdata = testing)
+confusionMatrix(testing$classe, predictCT)
+set.seed(333)
+inTrain <- createDataPartition(y = df$classe, p = 0.7, list = FALSE)
+training <- df[inTrain,]
+testing <- df[-inTrain,]
+# dim(training); dim(testing)
+str(training)
+NaRatio <- apply(trainingInitial, 2, function(col)sum(is.na(col))/length(col))
+df <- trainingInitial[,NaRatio == 0]
+df <- df[,-c(1:7)]
+df$classe <- as.factor(df$classe)
+knitr::opts_chunk$set(echo = TRUE)
+library(caret)
+library(rattle)
+# disable forced conversion to factor variables and treat empty data as NA
+trainingInitial <- read.csv("data/pml-training.csv", stringsAsFactors = FALSE, na.strings=c("NA",""), header = TRUE)
+testingFinal <- read.csv("data/pml-testing.csv", stringsAsFactors = FALSE, na.strings=c("NA",""), header=TRUE)
+NaRatio <- apply(trainingInitial, 2, function(col)sum(is.na(col))/length(col))
+df <- trainingInitial[,NaRatio == 0]
+df <- df[,-c(1:7)]
+df$classe <- as.factor(df$classe)
+set.seed(333)
+inTrain <- createDataPartition(y = df$classe, p = 0.7, list = FALSE)
+training <- df[inTrain,]
+testing <- df[-inTrain,]
+# dim(training); dim(testing)
+trControl <- trainControl(method="cv", number = 8)
+modelCT <- train(classe ~ . , data = training, method="rpart", trControl = trControl)
+predictCT <- predict(modelCT, newdata = testing)
+confusionMatrix(testing$classe, predictCT)
+confMatCT <- confusionMatrix(testing$classe, predictCT)
+confMatCT$overall[1]
+modelRF <- train(classe ~ ., data = training, method="rf", verbose=FALSE,
+trControl = trControl)
+modelRF <- train(classe ~ ., data = training, method="rf", verbose=FALSE,
+trControl = trControl)
+modelRF <- train(classe ~ ., data = training, method="rf", verbose=FALSE,
+trControl = trControl)
+trControl <- trainControl(method="cv", number = 5)
+modelCT <- train(classe ~ . , data = training, method="rpart", trControl = trControl)
+predictCT <- predict(modelCT, newdata = testing)
+confMatCT <- confusionMatrix(testing$classe, predictCT)
+confMatCT
+confMatCT$overall[1]
+modelRF <- train(classe ~ ., data = training, method="rf", verbose=FALSE,
+trControl = trControl)
+# disable forced conversion to factor variables and treat empty data as NA
+trainingInitial <- read.csv("data/pml-training.csv", header = TRUE)
+testingFinal <- read.csv("data/pml-testing.csv", header=TRUE)
+NaRatio <- apply(trainingInitial, 2, function(col)sum(is.na(col))/length(col))
+df <- trainingInitial[,NaRatio == 0]
+df <- df[,-c(1:7)]
+df$classe <- as.factor(df$classe)
+NaRatio <- apply(trainingInitial, 2, function(col)sum(is.na(col))/length(col))
+df <- trainingInitial[,NaRatio == 0]
+df <- df[,-c(1:7)]
+df$classe <- as.factor(df$classe)
+str(df)
+NaRatio <- apply(trainingInitial, 2, function(col)sum(is.na(col))/length(col))
+df <- trainingInitial[,NaRatio == 0]
+df <- df[,-c(1:7)]
+# df$classe <- as.factor(df$classe)
+dim(df)
+# disable forced conversion to factor variables and treat empty data as NA
+trainingInitial <- read.csv("data/pml-training.csv", na.strings=c("NA",""), header = TRUE)
+testingFinal <- read.csv("data/pml-testing.csv", na.strings=c("NA",""), header=TRUE)
+NaRatio <- apply(trainingInitial, 2, function(col)sum(is.na(col))/length(col))
+df <- trainingInitial[,NaRatio == 0]
+df <- df[,-c(1:7)]
+df$classe <- as.factor(df$classe)
+dim(df)
+set.seed(333)
+inTrain <- createDataPartition(y = df$classe, p = 0.7, list = FALSE)
+training <- df[inTrain,]
+testing <- df[-inTrain,]
+# dim(training); dim(testing)
+trControl <- trainControl(method="cv", number = 5)
+set.seed(333)
+inTrain <- createDataPartition(y = df$classe, p = 0.75, list = FALSE)
+training <- df[inTrain,]
+testing <- df[-inTrain,]
+# dim(training); dim(testing)
+trControl <- trainControl(method="cv", number = 5)
+modelCT <- train(classe ~ . , data = training, method="rpart", trControl = trControl)
+predictCT <- predict(modelCT, newdata = testing)
+confMatCT <- confusionMatrix(testing$classe, predictCT)
+confMatCT
+knitr::opts_chunk$set(echo = TRUE)
+library(caret)
+library(rattle)
+# disable forced conversion to factor variables and treat empty data as NA
+trainingInitial <- read.csv("data/pml-training.csv", na.strings=c("NA",""), header = TRUE)
+testingFinal <- read.csv("data/pml-testing.csv", na.strings=c("NA",""), header=TRUE)
+NaRatio <- apply(trainingInitial, 2, function(col)sum(is.na(col))/length(col))
+df <- trainingInitial[,NaRatio == 0]
+df <- df[,-c(1:7)]
+df$classe <- as.factor(df$classe)
+dim(df)
+set.seed(333)
+inTrain <- createDataPartition(y = df$classe, p = 0.75, list = FALSE)
+training <- df[inTrain,]
+testing <- df[-inTrain,]
+# dim(training); dim(testing)
+trControl <- trainControl(method="cv", number = 5)
+modelCT <- train(classe ~ . , data = training, method="rpart", trControl = trControl)
+predictCT <- predict(modelCT, newdata = testing)
+confMatCT <- confusionMatrix(testing$classe, predictCT)
+confMatCT
+modelRF <- train(classe ~ ., data = training, method="rf", verbose=FALSE,
+trControl = trControl)
+modelRF <- train(classe ~ ., data = training, method="rf", trControl = trControl, verbose=FALSE)
+modelRF <- train(classe ~ ., data = training, method="rf", trControl = trControl, verbose=TRUE)
+trControl <- trainControl(method="cv", number = 1)
+modelRF <- train(classe ~ ., data = training, method="rf", trControl = trControl, verbose=TRUE)
+trControl <- trainControl(method="cv", number = 2)
+modelRF <- train(classe ~ ., data = training, method="rf", trControl = trControl, verbose=TRUE)
+knitr::opts_chunk$set(echo = TRUE)
+library(caret)
+library(rattle)
+library(rpart)
+library(randomForest)
+# disable forced conversion to factor variables and treat empty data as NA
+trainingInitial <- read.csv("data/pml-training.csv", na.strings=c("NA",""), header = TRUE)
+testingFinal <- read.csv("data/pml-testing.csv", na.strings=c("NA",""), header=TRUE)
+NaRatio <- apply(trainingInitial, 2, function(col)sum(is.na(col))/length(col))
+df <- trainingInitial[,NaRatio == 0]
+df <- df[,-c(1:7)]
+df$classe <- as.factor(df$classe)
+dim(df)
+set.seed(333)
+inTrain <- createDataPartition(y = df$classe, p = 0.75, list = FALSE)
+training <- df[inTrain,]
+testing <- df[-inTrain,]
+# dim(training); dim(testing)
+modelRP<- rpart(classe ~ ., data = training, method="class")
+predictRP <- predict(modelRP, newdata = testing, type="class")
+confMatrixRP <- confusionMatrix(testing$classe, predictRP)
+confMatrixRP
+modelRF <- randomForest(classe ~ ., data = training, ntree = 10)
+predictRF <- predict(modelRF, newdata = testing)
+confMatRF <- confusionMatrix(testing$classe, predictRF)
+confMatRF
+# modelgbm <- train(classe ~ . , data = training, method="gbm", verbose=FALSE)
+myControl <- trainControl(
+method = "cv", number = 10,
+summaryFunction = twoClassSummary,
+classProbs = TRUE, # Super important!
+verboseIter = TRUE
+)
+modelglmnet <- train(classe ~ ., data = training, method="glmnet", family="multinomial")
+# modelglm
+# modelknn <- train(classe ~ . , data = training, method="knn")
+modelGbm <- train(classe ~ . , data = training, method="gbm", verbose=FALSE)
+library(gbm)
+library(caret)
+library(rattle)
+library(rpart)
+library(gbm)
+library(randomForest)
+modelGbm <- gbm(classe ~ .,data=training,
+distribution='multinomial',
+n.trees=50,
+interaction.depth=4,
+#cv.folds=5,
+shrinkage=0.005)
+predictGbm <- predict(modelGbm, newdata = testing)
+predictGbm <- predict(modelGbm, newdata = testing, type="response")
+predictGbm <- predict(modelGbm, newdata = testing, n.trees=200, type="response")
+predictGbm <- predict(modelGbm, newdata = testing, n.trees=50, type="response")
+confMatrixGbm <- confusionMatrix(testing$classe, predictGbm)
+predictGbm <- predict(modelGbm, newdata = testing, n.trees=50, type="response")
+head(predictGbm)
+predictGbm <- predict(modelGbm, newdata = testing, n.trees=50, type="response")
+dim(predictGbm)
+predictGbm <- predict(modelGbm, newdata = testing, n.trees=50, type="response")
+head(predictGbm)
+predictGbm <- predict(modelGbm, newdata = testing, n.trees=50, type="response")
+p.predBST <- apply(predictGbm, 1, which.max)
+predictGbm <- predict(modelGbm, newdata = testing, n.trees=50, type="response")
+confMatrixGbm <- confusionMatrix(testing$classe, predictGbm)
+predictGbm <- predict(modelGbm, newdata = testing, n.trees=50, type="response")
+predictGbm <- predict(modelGbm, newdata = testing, n.trees=50, type="response")
+dim(predictGbm)
+predictGbm <- predict(modelGbm, newdata = testing, n.trees=50, type="response")
+dim(predictGbm); dim(testing)
+predictGbm <- predict(modelGbm, newdata = testing, n.trees=50, type="response")
+head(predictGbm)
+predictGbm <- predict(modelGbm, newdata = testing, n.trees=50, type="response")
+predictGbm[1:5,]
+predictGbm <- predict(modelGbm, newdata = testing, n.trees=50, type="response")
+class(predictGbm)
+predictGbm <- predict(modelGbm, newdata = testing, n.trees=50, type="response")
+predictGbm[1]
+predictGbm <- predict(modelGbm, newdata = testing, n.trees=50, type="response")
+predictGbm[1,]
+predictGbm <- predict(modelGbm, newdata = testing, n.trees=50, type="response")
+predictGbm <- predict(modelGbm, newdata = testing, n.trees=50, type="response")
+pred_class <- apply(predictGbm, 1, which.max)
+predictGbm <- predict(modelGbm, newdata = testing, n.trees=50, type="response")
+pred_class <- apply(predictGbm, 1, which.max)
+pred_class
+predictGbm <- predict(modelGbm, newdata = testing, n.trees=50, type="response")
+pred_class <- apply(predictGbm, 1, which.max)
+#pred_class
+head(testing$classe)
+predictGbm <- predict(modelGbm, newdata = testing, n.trees=50, type="response")
+colnames(pred_class) <- c("A", "B", "C", "D", "E")
+predictGbm <- predict(modelGbm, newdata = testing, n.trees=50, type="response")
+colnames(pred_class) <- levels(testing$classe)
+predictGbm <- predict(modelGbm, newdata = testing, n.trees=50, type="response")
+pred_class <- apply(predictGbm, 1, which.max)
+pred_class
+predictGbm <- predict(modelGbm, newdata = testing, n.trees=50, type="response")
+pred_class <- apply(predictGbm, 1, which.max)
+levels(pred_class)
+predictGbm <- predict(modelGbm, newdata = testing, n.trees=50, type="response")
+pred_class <- apply(predictGbm, 1, which.max)
+length(pred_class)
+predictGbm <- predict(modelGbm, newdata = testing, n.trees=50, type="response")
+pred_class <- apply(predictGbm, 1, which.max)
+levels(pred_class)
+predictGbm <- predict(modelGbm, newdata = testing, n.trees=50, type="response")
+pred_class <- apply(predictGbm, 1, which.max)
+unique(pred_class)
+predictGbm <- predict(modelGbm, newdata = testing, n.trees=50, type="response")
+pred_class <- apply(predictGbm, 1, which.max)
+unique(pred_class); unique(testing$classe)
+predictGbm <- predict(modelGbm, newdata = testing, n.trees=50, type="response")
+colnames(predictGbm) <- c("A", "B", "C", "D", "E")
+pred_class <- apply(predictGbm, 1, which.max)
+predictGbm <- predict(modelGbm, newdata = testing, n.trees=50, type="response")
+pred_class <- apply(predictGbm, 1, which.max)
+colnames(predictGbm)[pred_class]
+predictGbm
+pred_class
+predictGbm <- predict(modelGbm, newdata = testing, n.trees=50, type="response")
+pred_class <- apply(predictGbm, 1, which.max)
+x <- colnames(predictGbm)[pred_class]
+confusionMatrix()
+predictGbm <- predict(modelGbm, newdata = testing, n.trees=50, type="response")
+pred_class <- apply(predictGbm, 1, which.max)
+x <- colnames(predictGbm)[pred_class]
+confusionMatrix(x, testing$classe)
+predictGbm <- predict(modelGbm, newdata = testing, n.trees=50, type="response")
+pred_class <- apply(predictGbm, 1, which.max)
+x <- colnames(predictGbm)[pred_class]
+x
+predictGbm <- predict(modelGbm, newdata = testing, n.trees=50, type="response")
+pred_class <- apply(predictGbm, 1, which.max)
+x <- colnames(predictGbm)[pred_class]
+testing$classe
+predictGbm <- predict(modelGbm, newdata = testing, n.trees=50, type="response")
+pred_class <- apply(predictGbm, 1, which.max)
+x <- colnames(predictGbm)[pred_class]
+levels(testing$classe)
+predictGbm <- predict(modelGbm, newdata = testing, n.trees=50, type="response")
+pred_class <- apply(predictGbm, 1, which.max)
+x <- colnames(predictGbm)[pred_class]
+levels(x)
+predictGbm <- predict(modelGbm, newdata = testing, n.trees=50, type="response")
+pred_class <- apply(predictGbm, 1, which.max)
+x <- colnames(predictGbm)[pred_class]
+mean(x == testing$classe)
+modelGbm <- gbm(classe ~ .,data=training,
+distribution='multinomial',
+n.trees=200,
+interaction.depth=5,
+#cv.folds=5,
+shrinkage=0.005)
+predictGbm <- predict(modelGbm, newdata = testing, n.trees=200, type="response")
+pred_class <- apply(predictGbm, 1, which.max)
+x <- colnames(predictGbm)[pred_class]
+mean(x == testing$classe)
+library(caret)
+library(rattle)
+library(rpart)
+library(gbm)
+library(randomForest)
+library(class)
+?knn
+modelKnn <- knn(train = training, test = testing, cl= training$classe, k = 5)
+modelKnn <- knn(train = training, test = testing, cl= training$classe, k = 6)
+trainingInitial <- read.csv("data/pml-training.csv", na.strings=c("NA",""), header = TRUE)
+dim(trainingInitial)
+```{r}
+trainingInitial <- read.csv("data/pml-training.csv", na.strings=c("NA",""), header = TRUE)
+dim(trainingInitial)
+testingFinal <- read.csv("data/pml-testing.csv", na.strings=c("NA",""), header=TRUE)
+dim(testingFinal)
+set.seed(333)
+inTrain <- createDataPartition(y = df$classe, p = 0.7, list = FALSE)
+training <- df[inTrain,]
+testing <- df[-inTrain,]
+# dim(training); dim(testing)
+knitr::opts_chunk$set(echo = TRUE)
+library(caret)
+library(rattle)
+library(rpart)
+library(gbm)
+library(randomForest)
+library(class)
+trainingInitial <- read.csv("data/pml-training.csv", na.strings=c("NA",""), header = TRUE)
+dim(trainingInitial)
+testingFinal <- read.csv("data/pml-testing.csv", na.strings=c("NA",""), header=TRUE)
+dim(testingFinal)
+# calculate percentage of missing values in each column
+NaRatio <- apply(trainingInitial, 2, function(col)sum(is.na(col))/length(col))
+# filter columns with missing values
+# all columns with missing values have high ratio of missing values(95% plus)
+df <- trainingInitial[,NaRatio == 0]
+# remove columns 1:7 due to their lack of relevance in model developments
+df <- df[,-c(1:7)]
+# convert response/target variable as factor variable
+df$classe <- as.factor(df$classe)
+set.seed(333)
+inTrain <- createDataPartition(y = df$classe, p = 0.7, list = FALSE)
+training <- df[inTrain,]
+testing <- df[-inTrain,]
+# dim(training); dim(testing)
+# create model
+modelRP<- rpart(classe ~ ., data = training, method="class")
+# Predicting the classe variables on testing dataset
+predictRP <- predict(modelRP, newdata = testing, type="class")
+confMatrixRP <- confusionMatrix(testing$classe, predictRP)
+confMatrixRP
+# create model
+modelRF <- randomForest(classe ~ ., data = training, ntree = 10)
+# Predicting the classe variables on testing dataset
+predictRF <- predict(modelRF, newdata = testing)
+confMatRF <- confusionMatrix(testing$classe, predictRF)
+confMatRF
+modelGbm <- gbm(classe ~ .,data=training,
+distribution='multinomial',
+n.trees=200,
+interaction.depth=5,
+#cv.folds=5,
+shrinkage=0.005)
+predictGbm <- predict(modelGbm, newdata = testing, n.trees=200, type="response")
+pred_class <- apply(predictGbm, 1, which.max)
+x <- colnames(predictGbm)[pred_class]
+mean(x == testing$classe)
+# create model
+modelRP<- rpart(classe ~ ., data = training, method="class")
+fancyRpartPlot(modelRP$finalModel)
+library(caret)
+library(rattle)
+library(rpart)
+library(gbm)
+library(randomForest)
+library(class)
+fancyRpartPlot(modelRP$finalModel)
+fancyRpartPlot(modelRP)
+confMatrixRP <- confusionMatrix(testing$classe, predictRP)
+confMatrixRP
+plot(modelRF)
+confMatRF <- confusionMatrix(testing$classe, predictRF)
+confMatRF
+finalPrediction <- predict(modelRF, newdata = testingFinal)
+finalPrediction
+library(rmarkdown)
+confMatrixRP
+confMatrixRP$overall
+confMatrixRP$overall$Accuracy
+confMatrixRP$overall[1]
+confMatrixRP$overall[1][1]
+knitr::opts_chunk$set(echo = TRUE)
+library(caret)
+library(rattle)
+library(rpart)
+library(gbm)
+library(randomForest)
+library(class)
+trainingInitial <- read.csv("data/pml-training.csv", na.strings=c("NA",""), header = TRUE)
+dim(trainingInitial)
+testingFinal <- read.csv("data/pml-testing.csv", na.strings=c("NA",""), header=TRUE)
+dim(testingFinal)
+# calculate percentage of missing values in each column
+NaRatio <- apply(trainingInitial, 2, function(col)sum(is.na(col))/length(col))
+# filter columns with missing values
+# all columns with missing values have high ratio of missing values(95% plus)
+df <- trainingInitial[,NaRatio == 0]
+# remove columns 1:7 due to their lack of relevance in model developments
+df <- df[,-c(1:7)]
+# convert response/target variable as factor variable
+df$classe <- as.factor(df$classe)
+set.seed(333)
+inTrain <- createDataPartition(y = df$classe, p = 0.7, list = FALSE)
+training <- df[inTrain,]
+testing <- df[-inTrain,]
+dim(training); dim(testing)
+# create model
+modelRP<- rpart(classe ~ ., data = training, method="class")
+fancyRpartPlot(modelRP)
+# Predicting the classe variables on testing dataset
+predictRP <- predict(modelRP, newdata = testing, type="class")
+confMatrixRP <- confusionMatrix(testing$classe, predictRP)
+confMatrixRP
+# create model
+modelRF <- randomForest(classe ~ ., data = training, ntree = 10)
+# Predicting the classe variables on testing dataset
+predictRF <- predict(modelRF, newdata = testing)
+confMatRF <- confusionMatrix(testing$classe, predictRF)
+confMatRF
+modelGbm <- gbm(classe ~ .,data=training,
+distribution='multinomial',
+n.trees=200,
+interaction.depth=5,
+#cv.folds=5,
+shrinkage=0.005)
+predictGbm <- predict(modelGbm, newdata = testing, n.trees=200, type="response")
+pred_class <- apply(predictGbm, 1, which.max)
+x <- colnames(predictGbm)[pred_class]
+GbmAccuracy <- mean(x == testing$classe)
+finalPrediction <- predict(modelRF, newdata = testingFinal)
+finalPrediction
+load("./data/stormData.RData")
+names(stormData)
+str(stormData)
+library(data.table)
+library(R.utils) # to unzip the bz2 format file
+library(dplyr) # load dplyr for data manipulation
+library(ggthemes) # use themes to beautify graphs
+library(ggplot2) # ggplot for data visualization
+url <- "https://d396qusza40orc.cloudfront.net/repdata%2Fdata%2FStormData.csv.bz2"
+if (!file.exists("./data/stormData.csv")) {
+if (!file.exists("./data/stormData.csv.bz2")) {
+download.file(url, destfile = "./data/stormData.csv.bz2",
+method = "curl",
+mode = "web")
+message("successfuly downloaded file")
+}
+bunzip2("stormData.csv.bz2", "./data/stormData.csv", remove = FALSE, skip = TRUE)
+message("Successfuly unzipped file")
+} else {
+message("file already exists!")
+}
+load("./data/stormData.RData")
+names(stormData)
+data <- read.csv("https://d396qusza40orc.cloudfront.net/repdata%2Fdata%2FStormData.csv.bz2")
+head(data)
+data <- read.csv("https://d396qusza40orc.clounoaadataront.net/repdata%2Fdata%2FStormData.csv.bz2")
+library(data.table)
+library(R.utils) # to unzip the bz2 format file
+library(dplyr) # load dplyr for data manipulation
+library(ggthemes) # use themes to beautify graphs
+library(ggplot2) # ggplot for data visualization
+url <- "https://d396qusza40orc.cloudfront.net/repdata%2Fdata%2FStormData.csv.bz2"
+if (!file.exists("./data/stormData.csv")) {
+if (!file.exists("./data/stormData.csv.bz2")) {
+download.file(url, destfile = "./data/stormData.csv.bz2",
+method = "curl",
+mode = "web")
+message("successfuly downloaded file")
+}
+bunzip2("stormData.csv.bz2", "./data/stormData.csv", remove = FALSE, skip = TRUE)
+message("Successfuly unzipped file")
+} else {
+message("file already exists!")
+}
+list.fileS()
+list.files()
+setwd("~/Documents/PROGRAMMING/Coursera/DS/assignments/CourseraRR-StormData")
+list.files("/data")
+list.files("/data/")
+list.files("./data/")
+data <- read.csv("./data/stormData.csv")
+dim(data)
+names(data)
+stormData <- read.csv("./data/stormData.csv")
+str(stormData)
+stormData <- read.csv("./data/stormData.csv", stringsAsFactors = FALSE, header=TRUE)
+stormData <- read.csv("./data/stormData.csv", stringsAsFactors = FALSE, header=TRUE)
+str(stormData)
+class("4/18/1950 0:00:00")
+as.Date(""4/18/1950 0:00:00"")
+library(lubridate)
+year("4/18/1950 0:00:00")
+year(as.Date("4/18/1950 0:00:00"))
+year(as.Date("4/18/1950 0:00:00", format = "%m/%d/%y %h:%m:%s"))
+year(as.Date("4/18/1950 0:00:00", format = "%m/%d/%Y %h:%m:%s"))
+as.Date("4/18/1950", format = "%m/%d/%Y")
+as.Date("4/18/1950 0:00:00", format = "%m/%d/%Y %h:%m:%s")
+strsplit(""4/18/1950 0:00:00"")
+strsplit("4/18/1950 0:00:00")
+strsplit("4/18/1950 0:00:00", split=" ")
+strsplit("4/18/1950 0:00:00", split=" ")[1]
+strsplit("4/18/1950 0:00:00", split=" ")[[1]]
+strsplit("4/18/1950 0:00:00", split=" ")
+strsplit("4/18/1950 0:00:00", split=" ")[[1]]
+strsplit("4/18/1950 0:00:00", split=" ")[[1]][1]
+gsub(".*/","","4/18/1950 0:00:00")
+as.Date("4/18/1950 0:00:00", format="%m/%d/%Y")
+year(as.Date("4/18/1950 0:00:00", format="%m/%d/%Y"))
+stormDate$YEAR <- year(as.Date(stormData$BGN_DATE, format="%m/%d/%Y"))
+stormData$YEAR <- year(as.Date(stormData$BGN_DATE, format="%m/%d/%Y"))
+hist(stormData$YEAR)
+humanCost <- stormData %>% group_by(EVTYPE) %>% summarize(totalFatalities = sum(FATALITIES), totalInjuries = sum(INJURIES), totalDamage = totalFatalities + totalInjuries) %>% arrange(desc(totalDamage)) %>% top_n(100)
+unique(humanCost$EVTYPE)
+unique(stormData$EVTYPE)
+length(unique(stormData$EVTYPE))
+unique(stormData$EVTYPE)
+length("wind" %in% unique(stormData$EVTYPE))
+sapply(unique(stormData$EVTYPE), function(x){"wind" %in% x})
+sapply(unique(stormData$EVTYPE), function(x){("WIND" %in% x})
+sapply(unique(stormData$EVTYPE), function(x){"WIND" %in% x})
+sum(sapply(unique(stormData$EVTYPE), function(x){"WIND" %in% x}))
+sum(sapply(unique(stormData$EVTYPE), function(x){"SNOW" %in% x}))
