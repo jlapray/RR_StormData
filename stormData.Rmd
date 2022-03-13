@@ -1,0 +1,140 @@
+author: "Jayce LaPray"
+date: "March 13, 2022"
+output: 
+  html_document:
+      toc: true
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Synopsis/Summary
+Severe weather events captured in the NOAA Storm database from 1950-2011 have been analyzed to assess the events causing the largest impact on US population health and economy. Tornadoes events were found to responsible for the greatest number of both fatalities and injuries. Floods were found to be responsible for the greatest economic cost.
+
+## Introduction
+Storms and other severe weather events can cause both public health and economic problems for communities and municipalities. Many severe events can result in fatalities, injuries, and property damage, and preventing such outcomes to the extent possible is a key concern.
+
+This project involves exploring the U.S. National Oceanic and Atmospheric Administration's (NOAA) storm database. This database tracks characteristics of major storms and weather events in the United States, including when and where they occur, as well as estimates of any fatalities, injuries, and property damage.
+
+## Data processing
+load required libraries
+```{r echo = TRUE, message=FALSE, warning=FALSE}
+library(dplyr) # load dplyr for data manipulation
+library(ggplot2) # ggplot for data visualization
+library(gridExtra) # to plot graphs side by side
+library(reshape2) # to melt the dataframe
+```
+
+Loading the data
+```{r}
+# url <- "https://d396qusza40orc.cloudfront.net/repdata%2Fdata%2FStormData.csv.bz2"
+data <- read.csv("data/stormData.csv", stringsAsFactors = FALSE, header=TRUE)
+str(data)
+```
+
+The data contains more than 90,000 observations and 37 variables. We need to extract and create a YEAR column from datetime column BGN_DATE. First, the column is converteded into datetime format and then a new column YEAR is created from BGN_DATE column.
+
+```{r}
+# format BGN_DATE as appropriate datetime format
+data$BGN_DATE <- as.POSIXct(data$BGN_DATE, format="%m/%d/%Y %H:%M:%S")
+# Create YEAR Column
+data$YEAR <- format(data$BGN_DATE, format="%Y")
+```
+
+The objective of this assignment is to collect data on human and economic cost of various natural events. We will retain relevant columns for this analysis and discard any redundant information.
+
+```{r}
+important <- c("YEAR", "EVTYPE", "FATALITIES", "INJURIES", "PROPDMG", "PROPDMGEXP", "CROPDMG", "CROPDMGEXP")
+data <- data[,important]
+str(data)
+```
+
+For the analysis, YEAR and EVTYPE columns are converted into factor variables.
+```{r}
+# convert YEAR and EVTYPE as factor variables
+data$YEAR <- as.factor(data$YEAR)
+data$EVTYPE <- as.factor(data$EVTYPE)
+```
+
+The property damage (PROPDMG) and crop damage(CROPDMG) number is reported with different units. To get a uniform cost estimate, we will convert all data in a uniform unit.
+
+```{r}
+# convert units to calculate property damage
+data$PDMULTIPLIER <- 10^0
+data$PDMULTIPLIER[data$PROPDMGEXP == "h"] <- 10^2
+data$PDMULTIPLIER[data$PROPDMGEXP == "H"] <- 10^2
+data$PDMULTIPLIER[data$PROPDMGEXP == "K"] <- 10^3
+data$PDMULTIPLIER[data$PROPDMGEXP == "m"] <- 10^6
+data$PDMULTIPLIER[data$PROPDMGEXP == "M"] <- 10^6
+data$PDMULTIPLIER[data$PROPDMGEXP == "B"] <- 10^9
+# convert units to calculate crop damage damage
+data$CDMULTIPLIER <- 10^0
+data$CDMULTIPLIER[data$CROPDMGEXP == "k"] <- 10^3
+data$CDMULTIPLIER[data$CROPDMGEXP == "K"] <- 10^3
+data$CDMULTIPLIER[data$CROPDMGEXP == "m"] <- 10^6
+data$CDMULTIPLIER[data$CROPDMGEXP == "M"] <- 10^6
+data$CDMULTIPLIER[data$CROPDMGEXP == "B"] <- 10^9
+str(data)
+```
+
+To calculate total cost of each event, we will multiply reported numbers with the respective multiplier.
+```{r}
+data$PROPTOTAL <- data$PROPDMG * data$PDMULTIPLIER
+data$CROPTOTAL <- data$CROPDMG * data$CDMULTIPLIER
+data$TOTALCOST <- data$PROPTOTAL + data$CROPTOTAL
+```
+
+## Results
+
+### Human impact of events
+```{r}
+#fatalities
+fatalities <- data %>% group_by(EVTYPE) %>% summarise(totalFatalities = sum(FATALITIES)) %>% arrange(desc(totalFatalities)) %>% head(n=10)
+plot1 <- ggplot(fatalities, aes(x = reorder(EVTYPE, -totalFatalities), y = totalFatalities)) + 
+    geom_bar(stat="identity", fill="red") +
+    ggtitle("Graph: Fatalities by type of catastrophe") + 
+    xlab("") +
+    ylab("Fatalities") +
+    theme(text=element_text(size=10)) +
+    coord_flip()
+```
+
+```{r}
+# Injuries
+injuries <- data %>% group_by(EVTYPE) %>% summarise(totalInjuries = sum(INJURIES)) %>% arrange(desc(totalInjuries)) %>% head(n=10)
+plot2 <- ggplot(injuries, aes(x = reorder(EVTYPE, -totalInjuries), y = totalInjuries) ) + 
+    geom_bar(stat="identity", fill="green") + 
+    ggtitle("Graph: Injuries by type of catastrophe") + 
+    xlab("") +
+    ylab("Injuries") +
+    theme(text=element_text(size=10)) +
+    coord_flip()
+```
+
+```{r, fig.height = 3, fig.width = 10}
+grid.arrange(plot1, plot2, ncol=2)
+```
+
+### Economic impact of events
+
+```{r}
+economic <- data %>% select(EVTYPE, PROPTOTAL, CROPTOTAL, TOTALCOST) %>% group_by(EVTYPE) %>% 
+    summarise(Property = sum(PROPTOTAL)/1000000000, Crop = sum(CROPTOTAL)/1000000000, Total = sum(TOTALCOST)/1000000000 ) %>% arrange(desc(Total)) %>% head(n=10)
+economic <- melt(data = economic, id.vars = "EVTYPE", measure.vars = c("Property", "Crop"))
+economic$EVTYPE <- as.character(economic$EVTYPE)
+economic$EVTYPE <- factor(economic$EVTYPE, levels=unique(economic$EVTYPE))
+# economic
+# Crop damage
+plot3 <- ggplot(economic, aes(x = EVTYPE, y = value, fill=variable) ) + 
+    geom_bar(stat="identity") + 
+    ggtitle("Economic Cost of Environmental Events") + 
+    xlab("Event type") + 
+    ylab("Cost in billions") +
+    theme(legend.title=element_blank(), 
+          legend.position=c(0.85,0.85),
+          axis.text.x = element_text(angle=20, hjust=1)) +
+    scale_fill_discrete(labels=c(" Property damage", " Crop damage"))
+    
+plot3
+```
